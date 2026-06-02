@@ -99,7 +99,10 @@ function buildEvent(eventName, leadId, userData, customData = {}) {
   return {
     event_name: eventName,
     event_time: Math.floor(Date.now() / 1000),
-    event_id: `lead-${leadId}-${eventName}-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
+    // Deterministic — same leadId + eventName produces same event_id. Meta
+    // deduplicates by event_id + user_data, so retries of the same event
+    // won't double-count.
+    event_id: `lead-${leadId}-${eventName}`,
     event_source_url:
       userData?.event_source_url ||
       (typeof process !== "undefined" ? process.env.APP_URL : undefined),
@@ -122,10 +125,15 @@ function buildEvent(eventName, leadId, userData, customData = {}) {
 }
 
 async function postEvents(events) {
-  const url = `https://graph.facebook.com/${API_VERSION}/${PIXEL_ID}/events?access_token=${ACCESS_TOKEN}`;
+  // Use Authorization: Bearer header instead of URL query param.
+  // This keeps the token out of server access logs.
+  const url = `https://graph.facebook.com/${API_VERSION}/${PIXEL_ID}/events`;
   const resp = await fetch(url, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${ACCESS_TOKEN}`,
+    },
     body: JSON.stringify({ data: events }),
   });
   if (!resp.ok) {

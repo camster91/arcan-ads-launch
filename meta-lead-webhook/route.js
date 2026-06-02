@@ -3,6 +3,7 @@ import { auditLog } from "../../utils/audit.js";
 import { authLimiter } from "../../utils/rate-limit.js";
 import { sendLeadEvent } from "../../utils/meta-capi.js";
 import { triggerWorkflow } from "../../email-workflows/route.js";
+import sql from "../../utils/sql.js";
 
 // Meta Lead Ads webhook receiver.
 // Verifies the X-Hub-Signature-256 header using META_LEAD_VERIFY_TOKEN (HMAC SHA-256 over raw body, prefixed with "sha256=").
@@ -10,7 +11,20 @@ import { triggerWorkflow } from "../../email-workflows/route.js";
 // Also fires the same downstream side effects as the website contact form: lead row + Telegram notify.
 
 function getVerifyToken() {
-  return process.env.META_LEAD_VERIFY_TOKEN || "";
+  const token = process.env.META_LEAD_VERIFY_TOKEN || "";
+  if (!token) {
+    throw new Error("META_LEAD_VERIFY_TOKEN is not configured — webhook is not enabled");
+  }
+  return token;
+}
+
+// Add a content-length check to prevent large-payload DoS
+function checkPayloadSize(request) {
+  const cl = parseInt(request.headers.get("content-length") || "0");
+  if (cl > 500_000) {
+    return true; // too large
+  }
+  return false;
 }
 
 async function hmacSha256Hex(secret, data) {
@@ -117,6 +131,7 @@ async function saveLead(baseUrl, lead) {
       preferredContact: lead.preferredContact,
       address: lead.address,
       leadSource: lead.source || "meta_lead_ad",
+      meta_lead_id: lead.meta?.leadId || null,
     }),
   });
   if (!resp.ok) {
@@ -144,9 +159,25 @@ export async function POST(request) {
   const limited = authLimiter(request);
   if (limited) return limited;
 
+  // Reject large payloads (DoS protection)
+  if (checkPayloadSize(request)) {
+    console.warn("[meta-leads] payload too large");
+    return new Response("payload too large", { status: 413 });
+  }
+
   const raw = await request.text();
   const sig = request.headers.get("x-hub-signature-256") || "";
-  const ok = await verifySignature(raw, sig);
+
+  let ok;
+  try {
+    ok = await verifySignature(raw, sig);
+  } catch (err) {
+    if (err.message.includes("not configured")) {
+      console.warn("[meta-leads] webhook not enabled:", err.message);
+      return new Response("webhook not configured", { status: 503 });
+    }
+    throw err; // unexpected — let it 500
+  }
   if (!ok) {
     console.warn("[meta-leads] invalid signature");
     return new Response("invalid signature", { status: 401 });
@@ -159,13 +190,33 @@ export async function POST(request) {
     return new Response("bad json", { status: 400 });
   }
 
+  // Cap number of entries to prevent one POST from flooding the database
+  const entries = payload?.entry || [];
+  if (entries.length > 100) {
+    console.warn("[meta-leads] too many entries:", entries.length);
+    return new Response("too many entries", { status: 400 });
+  }
+
   const baseUrl = process.env.APP_URL || request.url.split("/api/")[0];
   const results = [];
 
-  for (const entry of payload?.entry || []) {
+  for (const entry of entries) {
     for (const change of entry?.changes || []) {
       if (change?.field !== "leadgen" || !change?.value) continue;
       const lead = normaliseMetaLead(change.value);
+
+      // Duplicate detection: skip if this meta_lead_id was already saved
+      if (lead.meta?.leadId) {
+        try {
+          const existing = await sql`SELECT id FROM leads WHERE meta_lead_id = ${String(lead.meta.leadId)} LIMIT 1`;
+          if (existing.length > 0) {
+            console.log(`[meta-leads] duplicate lead ${lead.meta.leadId} — skipped`);
+            results.push({ ok: true, duplicate: true, meta: lead.meta });
+            continue;
+          }
+        } catch { /* dedup check best-effort */ }
+      }
+
       try {
         const saved = await saveLead(baseUrl, lead);
         results.push({ ok: true, leadId: saved.lead?.id, meta: lead.meta });
@@ -232,5 +283,15 @@ export async function POST(request) {
     }
   }
 
-  return Response.json({ received: results.length, results });
+  const succeeded = results.filter(r => r.ok && !r.duplicate).length;
+  const total = results.length;
+
+  // If every lead failed (server error, not a validation reject), return 500 so Meta retries.
+  // If all were duplicates, return 200 (Meta doesn't need to retry).
+  if (total > 0 && succeeded === 0 && !results.every(r => r.duplicate)) {
+    console.error("[meta-leads] all leads failed:", results.map(r => r.error || "unknown"));
+    return Response.json({ received: total, succeeded: 0, error: "all leads failed", results }, { status: 500 });
+  }
+
+  return Response.json({ received: total, succeeded, results });
 }

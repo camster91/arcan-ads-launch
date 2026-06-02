@@ -67,6 +67,7 @@ export async function runMigrations() {
         preferred_contact VARCHAR(20) DEFAULT 'phone',
         status VARCHAR(50) DEFAULT 'new',
         lead_source VARCHAR(100) DEFAULT 'website',
+        meta_lead_id VARCHAR(100),
         estimated_value NUMERIC,
         qualification_score INTEGER,
         follow_up_date DATE,
@@ -78,7 +79,9 @@ export async function runMigrations() {
     `;
     await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS deleted_at TIMESTAMP DEFAULT NULL`;
     await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS lead_source VARCHAR(100) DEFAULT 'website'`;
+    await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS meta_lead_id VARCHAR(100)`;
     await sql`CREATE INDEX IF NOT EXISTS idx_leads_lead_source ON leads(lead_source) WHERE deleted_at IS NULL`;
+    await sql`CREATE INDEX IF NOT EXISTS idx_leads_meta_lead_id ON leads(meta_lead_id) WHERE deleted_at IS NULL`;
     await sql`ALTER TABLE auth_sessions ADD COLUMN IF NOT EXISTS deleted_at TIMESTAMP DEFAULT NULL`;
 
     // ── email_templates (referenced by email-workflows engine) ─────────────

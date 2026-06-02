@@ -78,29 +78,28 @@ export async function POST(request) {
     let leadId = null;
     let leadSaved = false;
 
-    // Try saving the lead only when both email and phone are present (DB currently requires both)
+    // Try saving the lead (accepts email-only or phone-only leads; DB requires both for validation but accepts either if the other is an empty string)
     try {
-      if (hasEmail && hasPhone) {
-        const baseUrl = process.env.APP_URL || request.url.split("/api/")[0];
-        const leadResponse = await fetch(
-          `${baseUrl}/api/leads`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              name: body.name,
-              email: body.email,
-              phone: body.phone,
-              serviceType: body.serviceType,
-              projectDescription: body.projectDescription,
-              preferredContact: preferredContact,
-              address: body.address,
-              leadSource: body.leadSource || "website",
-            }),
+      const baseUrl = process.env.APP_URL || request.url.split("/api/")[0];
+      const leadResponse = await fetch(
+        `${baseUrl}/api/leads`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
           },
-        );
+          body: JSON.stringify({
+            name: body.name,
+            email: body.email || "",
+            phone: body.phone || "",
+            serviceType: body.serviceType,
+            projectDescription: body.projectDescription,
+            preferredContact: preferredContact,
+            address: body.address,
+            leadSource: body.leadSource || "website",
+          }),
+        },
+      );
 
         if (leadResponse.ok) {
           const leadData = await leadResponse.json();
@@ -134,7 +133,6 @@ export async function POST(request) {
           const leadError = await leadResponse.json();
           console.error("Failed to save lead:", leadError.error);
         }
-      }
     } catch (dbError) {
       console.error("Database error (continuing with email):", dbError);
     }

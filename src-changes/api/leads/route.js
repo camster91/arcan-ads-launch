@@ -57,6 +57,7 @@ export async function POST(request) {
         preferred_contact,
         status,
         lead_source,
+        meta_lead_id,
         follow_up_date,
         address
       ) VALUES (
@@ -68,6 +69,7 @@ export async function POST(request) {
         ${body.preferredContact || "phone"},
         'new',
         ${body.leadSource || "website"},
+        ${body.meta_lead_id || null},
         ${followUpDate.toISOString().split("T")[0]},
         ${body.address || ""}
       )

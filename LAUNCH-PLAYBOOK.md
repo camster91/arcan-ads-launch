@@ -57,11 +57,13 @@
   - 2 ad units (3A video, 3B single image)
   - Daily budget: $25
 - [ ] **Skip Campaign 4 and 5 for week 1** — too many campaigns, can't optimize
+- [ ] **Optional: build Campaign 1B (Exterior Refresh)** if you have exterior photos. June is peak season — see CAMPAIGN-PLAN.md C1B spec. Skip if no photos yet.
 - [ ] Pause all campaigns — do NOT publish yet
 - [ ] Test submit one lead form on each campaign to verify the full flow
 
-## Day 5 — Build Google campaign + LAUNCH
+## Day 5 — Build Google campaign + Set CAPI to production + LAUNCH
 
+- [ ] **CRITICAL: Set META_CAPI_TEST=false in Coolify env** — if this stays true, all CAPI server-side events go to Meta's Test Events tool instead of Live Events. Attribution will be broken. Verify in your Meta Events Manager → Live Events that you see `Lead` events after publishing.
 - [ ] Create Google Campaign 6 (WOW 1 Day Brand Conquest)
   - 5 exact-match keywords (see CAMPAIGN-PLAN.md)
   - 15 headlines, 4 descriptions (RSA)
@@ -166,6 +168,7 @@ Week of: ________
 
 Meta Campaigns:
   C1 Single Room: $___ spent, ___ leads, $___ CPL, ___ SQLs
+  C1B Exterior: $___ spent, ___ leads, $___ CPL, ___ SQLs
   C2 RE Pre-Listing: $___ spent, ___ leads, $___ CPL, ___ SQLs
   C3 Retargeting: $___ spent, ___ leads, $___ CPL, ___ SQLs
   C4 Family Story: $___ spent, ___ leads, $___ CPL, ___ SQLs
