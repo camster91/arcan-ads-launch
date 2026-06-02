@@ -1,0 +1,146 @@
+{
+  "single-room": {
+    "purpose": "Campaign 1 \u2014 Single Room Refresh (B2C, Meta Lead Form)",
+    "ad_units": [
+      {
+        "file": "single-room/IMG-20260212-WA0016_thumb.webp",
+        "scene": "Modern black/white staircase, after",
+        "headline_match": "Refresh One Room \u2014 From $499",
+        "orientation": "portrait",
+        "size_actual": "400x533",
+        "production_notes": "Vertical crop works for Stories/Reels; for feed use center 80%. Upscale to 1080px minimum."
+      },
+      {
+        "file": "single-room/PXL_20250217_224338011_MP_thumb.webp",
+        "scene": "Empty bright living room, white walls, after",
+        "headline_match": "From $499 \u2014 1 Room Refresh",
+        "orientation": "portrait",
+        "size_actual": "400x531",
+        "production_notes": "Clean composition, neutral. Best feed image for ad 1A (before/after implied)."
+      },
+      {
+        "file": "single-room/PXL_20260213_210915996_thumb.webp",
+        "scene": "Pink bedroom with floral accent wall, after",
+        "headline_match": "GTA Painters \u2014 5.0\u2605 Google",
+        "orientation": "landscape",
+        "size_actual": "400x301",
+        "production_notes": "Color story. For targeting 35-55 female homeowners."
+      },
+      {
+        "file": "single-room/PXL_20260213_211346296_thumb.webp",
+        "scene": "Two painters giving thumbs up in finished bedroom",
+        "headline_match": "WSIB-Covered. 2-Yr Warranty.",
+        "orientation": "landscape",
+        "size_actual": "400x300",
+        "production_notes": "Trust signal. Real Arcan crew. Use for ad 1B (painter-on-site angle). Highest trust of all 13."
+      }
+    ]
+  },
+  "re-listing": {
+    "purpose": "Campaign 2 \u2014 Real Estate Pre-Listing (B2B agents, Meta)",
+    "ad_units": [
+      {
+        "file": "re-listing/PXL_20210109_221844861_thumb.webp",
+        "scene": "Modern living room, vibrant blue accent wall, after",
+        "headline_match": "48-Hour Pre-Listing Painting",
+        "orientation": "landscape",
+        "size_actual": "400x225",
+        "production_notes": "Hero ad image. TV-mount + fireplace = aspirational for agents. 'Staging' angle."
+      },
+      {
+        "file": "re-listing/PXL_20200928_183711726_thumb.webp",
+        "scene": "Bold blue accent wall painting in progress, drop cloths, ladder",
+        "headline_match": "Toronto's Trusted Painting Crew",
+        "orientation": "landscape",
+        "size_actual": "400x225",
+        "production_notes": "DURING phase shot. Shows the work happening, not just result. Use for carousel card 2/3."
+      },
+      {
+        "file": "re-listing/PXL_20240507_232710177_MP_thumb.webp",
+        "scene": "Modern bedroom with dark navy accent wall, after",
+        "headline_match": "48-Hour Turnaround",
+        "orientation": "portrait",
+        "size_actual": "400x301",
+        "production_notes": "Bedroom niche. Staging for resale often needs neutral-to-bold swap."
+      }
+    ]
+  },
+  "retargeting": {
+    "purpose": "Campaign 3 \u2014 Retargeting (WSIB + Warranty trust, Meta)",
+    "ad_units": [
+      {
+        "file": "retargeting/PXL_20251009_180850831_thumb.webp",
+        "scene": "Painter on ladder applying finish to hand-painted mural accent wall",
+        "headline_match": "WSIB-Covered Crews. 25 Years.",
+        "orientation": "portrait",
+        "size_actual": "400x531",
+        "production_notes": "Best for video cover frame (ad 3A). Painter in white overalls, orange ladder, real mural. Demonstrates skill."
+      },
+      {
+        "file": "retargeting/PXL_20250902_151315576_thumb.webp",
+        "scene": "Painter in Benjamin Moore shirt, roller on light blue wall, drop cloths",
+        "headline_match": "2-Year Warranty, WSIB-Covered",
+        "orientation": "landscape",
+        "size_actual": "400x301",
+        "production_notes": "Best single-image ad (3B). Painter clearly wearing brand shirt, room identifiable as GTA home, professional gear."
+      },
+      {
+        "file": "retargeting/VID-20260212-WA0034_video_thumb.webp",
+        "scene": "Painter in hoodie painting white balusters on staircase, drop cloths",
+        "headline_match": "Still Thinking It Over?",
+        "orientation": "portrait",
+        "size_actual": "400x717",
+        "production_notes": "Taller aspect ratio = better for Stories. Use as 9:16 video cover."
+      }
+    ]
+  },
+  "brand": {
+    "purpose": "Campaign 4 (Google Brand Conquest) + general trust layer",
+    "ad_units": [
+      {
+        "file": "brand/20160901_105150_thumb.webp",
+        "scene": "Painter on scaffolding spray-painting commercial ceiling, red beams, white brick walls",
+        "headline_match": "Commercial Painting Done Right",
+        "orientation": "landscape",
+        "size_actual": "400x300",
+        "production_notes": "ONLY commercial 'during' shot. Use in any commercial-targeted ad or to show scale."
+      },
+      {
+        "file": "brand/PXL_20251018_142500065_thumb.webp",
+        "scene": "Commercial dining room, vibrant multi-pattern wallpaper, matte black ceiling, pink chairs",
+        "headline_match": "Specialty Finishes & Wallpaper",
+        "orientation": "portrait",
+        "size_actual": "400x531",
+        "production_notes": "Upscale/boutique commercial work. Use in specialty/niche ad sets."
+      },
+      {
+        "file": "brand/canabate-family.jpg",
+        "scene": "Ca\u00f1abate family \u2014 Jose and three sons (Pablo, Gerardo, JJ) painting a Toronto house",
+        "headline_match": "Family-Run, 25+ Years",
+        "orientation": "landscape",
+        "size_actual": "1200x800",
+        "production_notes": "FAMILY STORY image. Use as 'About' hero on landing pages, or as a Google RSA sitelink image. NOT in feed ads (too busy for 1:1 crop). This is the human story of the business \u2014 leverage it."
+      }
+    ]
+  },
+  "production_notes": {
+    "image_quality_warning": "All arcanpainting.ca images are 400-533px wide (low-res WebP thumbnails). Meta requires 1080x1080 minimum for feed, 1080x1920 for Stories. Use these for concept mocks and ad preview only. For production launch, request full-res originals from Gerardo or upload upscaled versions.",
+    "upscaling_options": [
+      "Topaz Gigapixel AI (one-time $99, batch upscale 2-4x with no quality loss) \u2014 RECOMMENDED",
+      "Real-ESRGAN (free, command-line, similar quality)",
+      "Adobe Photoshop 'Preserve Details 2.0' upscale (if PS available)",
+      "Avoid browser-based upscales (Let\u2019s Enhance etc.) \u2014 quality ceiling is too low"
+    ],
+    "color_profiles": "WebP thumbnails likely sRGB. Verify in Photoshop after upscaling.",
+    "watermarks": "No watermarks detected on any of the 13 downloaded images. Safe for direct ad use with permission (which Arcan owns them).",
+    "people_in_images": [
+      "PXL_20260213_211346296_thumb.webp: 2 painters visible (faces not super clear but clearly identifiable as crew)",
+      "PXL_20251009_180850831_thumb.webp: 1 painter visible from behind, on ladder",
+      "PXL_20250902_151315576_thumb.webp: 1 painter visible, facing wall",
+      "VID-20260212-WA0034_video_thumb.webp: 1 painter visible, back to camera",
+      "20160901_105150_thumb.webp: 1 painter visible, wearing respirator (face covered)",
+      "canabate-family.jpg: 4 people visible, all family members"
+    ],
+    "model_release_status": "Need to confirm with Gerardo. Painter faces mostly obscured or backs to camera = safer. Family photo = assume consent but verify."
+  }
+}
